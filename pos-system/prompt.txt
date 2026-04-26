@@ -1,0 +1,268 @@
+Actúa como un ingeniero de software senior especializado en sistemas POS (Point of Sale) para restaurantes.
+
+Quiero que generes un proyecto COMPLETO, funcional y listo para ejecutarse en VS Code o subirse a GitHub.
+
+# 🎯 OBJETIVO
+
+Desarrollar un sistema POS local (offline-first) para un restaurante que vende tacos, hamburguesas y productos de carne asada.
+
+Debe ser un MVP funcional pero con arquitectura profesional y modular para escalar en el futuro.
+
+---
+
+# 🧱 TECNOLOGÍA OBLIGATORIA
+
+* Backend: Python con Flask
+* Base de datos: SQLite (archivo local)
+* ORM: SQLAlchemy
+* Frontend: HTML + CSS + JavaScript (sin frameworks pesados)
+* El sistema debe correr localmente en:
+  http://localhost:5000
+
+---
+
+# 💻 EJECUCIÓN
+
+* Debe incluir instrucciones claras para ejecutar en VS Code
+* Debe poder abrirse desde un solo comando:
+  python app.py
+* Opcional: abrir automáticamente el navegador
+* Preparado para ser empaquetado después con PyInstaller
+
+---
+
+# 🧩 ARQUITECTURA DEL PROYECTO
+
+Estructura esperada:
+
+pos-system/
+│
+├── app.py
+├── database.py
+├── models.py
+├── config.py
+│
+├── routes/
+│   ├── auth.py
+│   ├── products.py
+│   ├── orders.py
+│   ├── payments.py
+│   └── reports.py
+│
+├── templates/
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── pos.html
+│   ├── kitchen.html
+│   └── reports.html
+│
+├── static/
+│   ├── css/
+│   └── js/
+│
+└── database.db
+
+---
+
+# 👤 USUARIOS Y ROLES
+
+Roles:
+
+1. Administrador
+
+   * crear usuarios
+   * ver reportes
+   * editar productos
+   * cancelar productos (con validación)
+
+2. Cajero
+
+   * crear órdenes
+   * cobrar
+
+3. Cocina
+
+   * ver órdenes pendientes
+
+Requisitos:
+
+* Login funcional
+* Registro de usuarios
+* Cada orden debe guardar qué usuario la creó
+
+---
+
+# 🍔 PRODUCTOS
+
+* Categorías (Tacos, Hamburguesas, Bebidas, Extras)
+* Productos editables
+* Modificadores con precio adicional
+
+Ejemplo:
+Taco bistec $30
+
+* queso $5
+* aguacate $10
+
+- Combos (estructura básica)
+
+---
+
+# 📦 ÓRDENES
+
+Tipos de orden:
+
+* Mesa (con número)
+* Para llevar
+* Domicilio
+
+Requisitos:
+
+* Número de orden automático (incremental)
+* Agregar productos a la orden
+* Agregar modificadores
+* Editar orden (solo admin)
+* Dividir cuenta
+* Estados:
+
+  * pendiente
+  * en preparación
+  * lista
+  * completada
+
+---
+
+# 🔥 COCINA
+
+Sistema de cocina separado por áreas:
+
+* parrilla
+* tacos
+
+Requisitos:
+
+* Cada producto tiene asignada un área:
+
+  * parrilla
+  * tacos
+  * caja (bebidas, no se imprime en cocina)
+
+* Vista de cocina:
+  /kitchen/parrilla
+  /kitchen/tacos
+
+* Mostrar solo órdenes relevantes
+
+* Botón “LISTO” para cambiar estado
+
+---
+
+# 💳 PAGOS
+
+* Métodos:
+
+  * efectivo
+  * tarjeta
+  * transferencia
+
+* Permitir pagos mixtos:
+  Ejemplo:
+  200 efectivo
+  100 tarjeta
+
+---
+
+# 📊 REPORTES
+
+* ventas del día
+* ventas por producto
+* ventas por cajero
+* productos más vendidos
+* corte de caja
+* filtros por fecha
+* exportación a Excel (básico)
+
+---
+
+# 🧠 BASE DE DATOS (OBLIGATORIO)
+
+Tablas mínimas:
+
+* users
+* categories
+* products
+* modifiers
+* orders
+* order_items
+* payments
+
+Usar SQLAlchemy.
+
+---
+
+# 🎨 UI / UX
+
+* Interfaz tipo POS
+* Botones grandes
+* Categorías visibles
+* Flujo rápido para cajero
+
+Pantalla POS:
+
+* izquierda: categorías y productos
+* derecha: orden actual + total
+
+---
+
+# ⚙️ FUNCIONALIDAD MÍNIMA (MVP)
+
+Debe funcionar completamente:
+
+* login
+* crear orden
+* agregar productos
+* calcular total
+* guardar orden
+* ver órdenes en cocina
+* cambiar estado
+* registrar pago
+
+---
+
+# 🔒 SIMPLIFICACIONES (IMPORTANTE)
+
+* NO usar JWT
+* NO usar autenticación compleja
+* NO usar frameworks frontend (React, Vue, etc.)
+* NO implementar facturación SAT aún
+* NO implementar impresoras reales (solo simular)
+
+---
+
+# 📦 OUTPUT ESPERADO
+
+* Proyecto completo listo para ejecutar
+* Código limpio y organizado
+* Comentarios en el código
+* Instrucciones en README.md
+* Datos de ejemplo (productos y usuario admin)
+
+Usuario admin por defecto:
+usuario: admin
+password: admin
+
+---
+
+# 🚀 EXTRA (SI ES POSIBLE)
+
+* Script para crear base de datos automáticamente
+* Script para poblar productos iniciales
+* Auto abrir navegador al iniciar
+
+---
+
+Genera TODO el proyecto completo, no solo fragmentos.
+***********************************************
+tenemos una situación donde al momento de enviar a cocina (Pendiente de pago) depues de que en cocina se selecciona marcar listo no existe un botón que pueda cobrar (o dime tu donde esta) lo cual hace que no se refleje en el dashboard administrativo y no suma a las ventas de hoy.
+puedes hacer el cambio completamente a mis archivos solo para dar otra vez Python run py
+

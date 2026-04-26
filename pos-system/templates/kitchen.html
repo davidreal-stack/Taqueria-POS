@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="kitchen-header mb-2 flex flex-between">
+    <h1>Cocina: <span class="text-primary" style="text-transform: capitalize;">{{ area }}</span></h1>
+    <span class="badge badge-info fs-medium">Actualización automática 10s</span>
+</div>
+
+<div class="kitchen-grid" id="kitchen-container">
+    <div class="glass-panel text-center p-3 w-100">Cargando órdenes...</div>
+</div>
+
+<script>
+    const area = "{{ area }}";
+    
+    async function loadKitchenOrders() {
+        try {
+            const res = await fetch(`/orders/api/kitchen/${area}`);
+            const orders = await res.json();
+            const container = document.getElementById('kitchen-container');
+            
+            if (orders.length === 0) {
+                container.innerHTML = '<div class="glass-panel text-center p-3 w-100 text-muted">No hay órdenes pendientes.</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            orders.forEach(order => {
+                let html = `
+                    <div class="kitchen-ticket glass-panel" id="order-${order.id}">
+                        <div class="ticket-header flex flex-between mb-1 border-bottom pb-1">
+                            <h3>#${order.id}</h3>
+                            <span class="badge badge-primary">${order.order_type}</span>
+                            <span class="text-muted">${order.created_at}</span>
+                        </div>
+                        <ul class="ticket-items list-unstyled">
+                `;
+                
+                order.items.forEach(item => {
+                    html += `
+                        <li class="ticket-item mb-2 p-1 bg-light rounded" id="item-${item.item_id}">
+                            <div class="item-name fs-medium"><strong>${item.quantity}x</strong> ${item.product_name}</div>
+                    `;
+                    if (item.modifiers && item.modifiers.length > 0) {
+                        html += `<div class="item-mods text-danger fs-small ml-2">`;
+                        item.modifiers.forEach(mod => {
+                            html += `• ${mod.name}<br>`;
+                        });
+                        html += `</div>`;
+                    }
+                    html += `<button class="btn btn-sm btn-success mt-1 w-100" onclick="markReady(${item.item_id})">Marcar Listo</button>
+                        </li>`;
+                });
+                
+                html += `</ul></div>`;
+                container.innerHTML += html;
+            });
+        } catch (e) {
+            console.error("Error loading kitchen orders", e);
+        }
+    }
+
+    async function markReady(itemId) {
+        document.getElementById(`item-${itemId}`).style.opacity = '0.4';
+        const res = await fetch(`/orders/api/kitchen/item/${itemId}/ready`, { method: 'POST' });
+        if (res.ok) {
+            setTimeout(loadKitchenOrders, 500);
+        } else {
+            document.getElementById(`item-${itemId}`).style.opacity = '1';
+        }
+    }
+
+    setInterval(loadKitchenOrders, 10000);
+    loadKitchenOrders();
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller folders
+build/
+dist/
+*.spec
+
+# Base de datos local
+database.db
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+.env
+
+# Misceláneos
+.vscode/
+.DS_Store

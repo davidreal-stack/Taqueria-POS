@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="glass-panel p-3">
+    <h2 class="mb-2">Catálogo de Productos</h2>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>{{ p.name }}</td>
+                    <td><span class="badge badge-info">{{ p.category.name }}</span></td>
+                    <td>${{ "%.2f"|format(p.price) }}</td>
+                    <td>
+                        {% if p.active %}
+                        <span class="badge badge-success">Activo</span>
+                        {% else %}
+                        <span class="badge badge-danger">Inactivo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

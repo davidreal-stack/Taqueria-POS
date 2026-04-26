@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% if session.get('user_id') %}
+    <nav class="navbar">
+        <div class="nav-brand">🍔 Taqueria POS</div>
+        <div class="nav-links">
+            {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('reports.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('products.list_products') }}">Productos</a>
+            <a href="{{ url_for('reports.index') }}">Reportes</a>
+            {% endif %}
+            
+            {% if session.get('role') in ['admin', 'cajero'] %}
+            <a href="{{ url_for('orders.pos') }}">Punto de Venta</a>
+            {% endif %}
+            
+            {% if session.get('role') in ['admin', 'cocina'] %}
+            <a href="{{ url_for('orders.kitchen_view', area='parrilla') }}">Cocina (Parrilla)</a>
+            <a href="{{ url_for('orders.kitchen_view', area='tacos') }}">Cocina (Tacos)</a>
+            {% endif %}
+        </div>
+        <div class="nav-user">
+            <span>👤 {{ session.get('username') }} ({{ session.get('role') }})</span>
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-sm btn-outline">Salir</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

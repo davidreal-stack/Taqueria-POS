@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard">
+    <h1 class="mb-2">Dashboard Administrativo</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card glass-panel">
+            <h3>Ventas de Hoy</h3>
+            <p class="stat-value text-success">${{ "%.2f"|format(total_sales) }}</p>
+        </div>
+        <div class="stat-card glass-panel">
+            <h3>Órdenes Completadas</h3>
+            <p class="stat-value text-primary">{{ order_count }}</p>
+        </div>
+    </div>
+    
+    <div class="recent-orders mt-3 glass-panel p-2">
+        <h2>Órdenes Recientes Completadas</h2>
+        <table class="data-table mt-1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                {% if order.status == 'completada' %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.order_type }}</td>
+                    <td>${{ "%.2f"|format(order.total) }}</td>
+                    <td><span class="badge badge-success">{{ order.status }}</span></td>
+                    <td>{{ order.created_at.strftime('%H:%M') }}</td>
+                </tr>
+                {% endif %}
+                {% else %}
+                <tr><td colspan="5" class="text-center p-2">No hay órdenes completadas hoy.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

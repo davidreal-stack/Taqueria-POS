@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="reports-container glass-panel p-3">
+    <h2 class="mb-2">Historial Completo de Órdenes</h2>
+    
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Fecha y Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.order_type }}</td>
+                    <td>
+                        {% if order.status == 'completada' %}
+                            <span class="badge badge-success">Completada</span>
+                        {% elif order.status == 'lista' %}
+                            <span class="badge badge-primary">Lista</span>
+                        {% elif order.status == 'pendiente' %}
+                            <span class="badge badge-warning">Pendiente / Cocina</span>
+                        {% else %}
+                            <span class="badge badge-secondary">{{ order.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-success font-weight-bold">${{ "%.2f"|format(order.total) }}</td>
+                    <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center p-3">No hay datos para mostrar.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
